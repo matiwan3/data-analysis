@@ -1,6 +1,6 @@
 Case studies z automatyzacji, BI i analizy danych — SQL, n8n, dashboardy i wnioski z realnych zbiorów danych.
 
-🔗 [LinkedIn](https://www.linkedin.com/in/matwandz/) — publikacje i krótkie wpisy. 
+🔗 [LinkedIn](https://www.linkedin.com/in/matwandz/) — publikacje i krótkie wpisy.  
 🎥 [YouTube](https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA) — analizy głosowe i omówienia
 
 ---
