@@ -1,23 +1,21 @@
-Case studies z automatyzacji, BI i analizy danych — SQL, n8n, dashboardy i wnioski z realnych zbiorów danych.
+## O mnie
 
-🔗 [LinkedIn](https://www.linkedin.com/in/matwandz/) — publikacje i wpisy  
-🎥 [YouTube](https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA) — analizy i przegląd  
-💻 [GitHub](https://github.com/matiwan3/data-analysis) — kod i repozytorium
+Od ponad 4 lat tworzę automatyzację dla projektów IT, wykorzystując nowoczesne narzędzia typu n8n, uzupelniając wyniki o rzetelną analizę danych i dashboardy BI. Strona na której się znajdujesz jest zbiorem moich case studies — kod, metodologia i wnioski z realnych zbiorów. 
 
----
+## Projekty
 
-## 🏠 Nieruchomości
+### 🏠 Nieruchomości
 
 - [Ceny mieszkań w Bydgoszczy 2006–2026 vs stopy procentowe NBP](./real-estate/bydgoszcz-ceny-mieszkan.md)
 
-## 🤖 Automatyzacja
+### 🤖 Automatyzacja
 
 *(wkrótce)*
 
-## 💱 Finanse
+### 💱 Finanse
 
 *(wkrótce)*
 
----
+## Blog
 
-*Strona aktualizowana na bieżąco wraz z nowymi projektami.*
+*(wkrótce)*
