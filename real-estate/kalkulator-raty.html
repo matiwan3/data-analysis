@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator raty kredytu hipotecznego</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #16181d;
+    --card: #1f232b;
+    --border: rgba(255,255,255,0.1);
+    --text: #e6e8eb;
+    --muted: #9aa1ab;
+    --accent: #f4c542;
+    --accent2: #5ec9f7;
+    --danger: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 24px 16px 60px;
+  }
+  .container { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 1.5em; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 28px; font-size: 0.95em; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  input[type="number"] {
+    width: 100%;
+    background: #12141a;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 1em;
+  }
+  .toggle-group { display: flex; gap: 8px; margin-top: 4px; }
+  .toggle-btn {
+    flex: 1;
+    padding: 8px 10px;
+    background: #12141a;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    text-align: center;
+  }
+  .toggle-btn.active {
+    background: var(--accent);
+    color: #16181d;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .summary .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .summary .stat .value { font-size: 1.4em; font-weight: 700; }
+  .summary .stat .label { color: var(--muted); font-size: 0.8em; margin-top: 4px; }
+  .stat.highlight .value { color: var(--accent); }
+  .stat.saving .value { color: #6fd68a; }
+
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .chart-wrap canvas { max-height: 340px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85em;
+  }
+  th, td {
+    text-align: right;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--card); }
+  .table-scroll { max-height: 320px; overflow-y: auto; border: 1px solid var(--border); border-radius: 10px; background: var(--card); }
+  .legend { display:flex; gap:18px; font-size:0.8em; color:var(--muted); margin-bottom:8px; flex-wrap:wrap; }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>💰 Kalkulator raty kredytu hipotecznego</h1>
+  <div class="subtitle">Symulacja spadku raty i kapitału z uwzględnieniem comiesięcznych nadpłat</div>
+
+  <div class="grid">
+    <div class="card">
+      <label>Pozostały kapitał (zł)</label>
+      <input type="number" id="principal" value="280000" step="1000">
+    </div>
+    <div class="card">
+      <label>Oprocentowanie roczne (%)</label>
+      <input type="number" id="rate" value="6.65" step="0.01">
+    </div>
+    <div class="card">
+      <label>Pozostały okres (lata) — z umowy kredytowej</label>
+      <input type="number" id="years" value="25" step="1" readonly style="opacity:0.6; cursor:not-allowed;">
+    </div>
+    <div class="card">
+      <label>Data wzięcia kredytu</label>
+      <input type="date" id="startDate" value="2024-11-01">
+    </div>
+    <div class="card">
+      <label>Miesięczna nadpłata (zł)</label>
+      <input type="number" id="overpay" value="0" step="50">
+    </div>
+  </div>
+
+  <div class="card" id="fixedRateNote" style="margin-bottom:24px; font-size:0.85em; color:var(--muted);"></div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="chart-wrap">
+    <div class="legend">
+      <span><span class="dot" style="background:#f4c542"></span>Pozostały kapitał — bez nadpłat</span>
+      <span><span class="dot" style="background:#5ec9f7"></span>Pozostały kapitał — z nadpłatą</span>
+    </div>
+    <canvas id="balanceChart"></canvas>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Miesiąc</th><th>Data</th><th>Rata (kapitał+odsetki)</th><th>Kapitał</th><th>Odsetki</th><th>Nadpłata</th><th>Pozostały kapitał</th></tr>
+      </thead>
+      <tbody id="scheduleBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const mode = 'shorten';
+
+['principal','rate','years','overpay','startDate'].forEach(id => {
+  document.getElementById(id).addEventListener('input', calculate);
+});
+
+function addMonths(date, n) {
+  const d = new Date(date);
+  d.setMonth(d.getMonth() + n);
+  return d;
+}
+function fmtDate(d) {
+  return d.toLocaleDateString('pl-PL', { month: 'short', year: 'numeric' });
+}
+
+function annuityPayment(principal, monthlyRate, nMonths) {
+  if (monthlyRate === 0) return principal / nMonths;
+  return principal * (monthlyRate * Math.pow(1+monthlyRate, nMonths)) / (Math.pow(1+monthlyRate, nMonths) - 1);
+}
+
+function simulate(principal, annualRatePct, years, overpay, mode) {
+  const monthlyRate = (annualRatePct / 100) / 12;
+  let nMonths = years * 12;
+  let balance = principal;
+  let payment = annuityPayment(balance, monthlyRate, nMonths);
+  const schedule = [];
+  let totalInterest = 0;
+  let month = 0;
+
+  while (balance > 1 && month < 720) {
+    month++;
+    const interest = balance * monthlyRate;
+    let principalPart = payment - interest;
+    if (principalPart > balance) principalPart = balance;
+    let over = overpay;
+    if (principalPart + over > balance) over = Math.max(0, balance - principalPart);
+
+    balance = balance - principalPart - over;
+    totalInterest += interest;
+
+    schedule.push({
+      month, payment: principalPart + interest, principalPart, interest, over, balance
+    });
+
+    if (overpay > 0 && mode === 'reduce' && balance > 0) {
+      const remainingMonths = nMonths - month;
+      if (remainingMonths > 0) {
+        payment = annuityPayment(balance, monthlyRate, remainingMonths);
+      }
+    }
+  }
+  return { schedule, totalInterest, months: month };
+}
+
+function fmt(n) {
+  return n.toLocaleString('pl-PL', {maximumFractionDigits:0}) + ' zł';
+}
+
+let chart = null;
+
+function calculate() {
+  const principal = parseFloat(document.getElementById('principal').value) || 0;
+  const rate = parseFloat(document.getElementById('rate').value) || 0;
+  const years = parseFloat(document.getElementById('years').value) || 1;
+  const overpay = parseFloat(document.getElementById('overpay').value) || 0;
+  const startDate = new Date(document.getElementById('startDate').value || '2024-11-01');
+
+  const fixedRateEnd = addMonths(startDate, 60);
+  document.getElementById('fixedRateNote').innerHTML =
+    `📌 Oprocentowanie <strong>${rate}%</strong> jest stałe do <strong>${fmtDate(fixedRateEnd)}</strong> (5 lat od uruchomienia kredytu). ` +
+    `Po tym okresie kalkulator zakłada tę samą stopę procentową dalej — realne przyszłe oprocentowanie zależy od decyzji NBP i jest trudne do przewidzenia, więc traktuj wynik po tej dacie jako orientacyjny.`;
+
+  const base = simulate(principal, rate, years, 0, mode);
+  const withOver = simulate(principal, rate, years, overpay, mode);
+
+  const monthsSaved = base.months - withOver.months;
+  const interestSaved = base.totalInterest - withOver.totalInterest;
+  const firstPayment = withOver.schedule[0];
+  const payoffDate = addMonths(startDate, withOver.months);
+
+  document.getElementById('summary').innerHTML = `
+    <div class="stat highlight">
+      <div class="value">${fmt(firstPayment.payment)}</div>
+      <div class="label">Pierwsza rata</div>
+    </div>
+    <div class="stat">
+      <div class="value">${withOver.months} mies.</div>
+      <div class="label">Czas do spłaty (${(withOver.months/12).toFixed(1)} lat)</div>
+    </div>
+    <div class="stat">
+      <div class="value">${fmtDate(payoffDate)}</div>
+      <div class="label">Planowana data spłaty</div>
+    </div>
+    <div class="stat">
+      <div class="value">${fmt(withOver.totalInterest)}</div>
+      <div class="label">Suma odsetek</div>
+    </div>
+    <div class="stat saving">
+      <div class="value">${overpay > 0 ? fmt(interestSaved) : '—'}</div>
+      <div class="label">Oszczędność na odsetkach</div>
+    </div>
+    <div class="stat saving">
+      <div class="value">${overpay > 0 ? monthsSaved + ' mies.' : '—'}</div>
+      <div class="label">Skrócenie okresu</div>
+    </div>
+  `;
+
+  const step = Math.max(1, Math.ceil(Math.max(base.months, withOver.months) / 60));
+  const labels = [];
+  const baseData = [];
+  const overData = [];
+  for (let i = 0; i < Math.max(base.months, withOver.months); i += step) {
+    labels.push(fmtDate(addMonths(startDate, i)));
+    baseData.push(base.schedule[i] ? Math.round(base.schedule[i].balance) : 0);
+    overData.push(withOver.schedule[i] ? Math.round(withOver.schedule[i].balance) : 0);
+  }
+
+  const ctx = document.getElementById('balanceChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Bez nadpłat', data: baseData, borderColor: '#f4c542', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 },
+        { label: 'Z nadpłatą', data: overData, borderColor: '#5ec9f7', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#9aa1ab', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#9aa1ab' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+
+  const tbody = document.getElementById('scheduleBody');
+  tbody.innerHTML = withOver.schedule.slice(0, 360).map(r => `
+    <tr>
+      <td>${r.month}</td>
+      <td>${fmtDate(addMonths(startDate, r.month - 1))}</td>
+      <td>${fmt(r.payment)}</td>
+      <td>${fmt(r.principalPart)}</td>
+      <td>${fmt(r.interest)}</td>
+      <td>${r.over > 0 ? fmt(r.over) : '—'}</td>
+      <td>${fmt(r.balance)}</td>
+    </tr>
+  `).join('');
+}
+
+calculate();
+</script>
+</body>
+</html>
