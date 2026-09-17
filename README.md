@@ -10,4 +10,4 @@ Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne
 ### Nieruchomości
 
 - [Ceny mieszkań w Bydgoszczy 2006–2026 vs stopy procentowe NBP](./real-estate/bydgoszcz-ceny-mieszkan.md)
-- [Kalkulator raty kredytu hipotecznego (z nadpłatami)](./narzedzia/kalkulator-raty.html)
+- [Kalkulator raty kredytu hipotecznego (z nadpłatami)](./real-estate/kalkulator-raty.html)
