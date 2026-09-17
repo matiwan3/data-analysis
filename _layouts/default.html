@@ -1,15 +1,124 @@
 <!doctype html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="pl">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 {% seo %}
-<link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script src="{{ '/assets/js/respond.js' | relative_url }}"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-{% include head-custom.html %}
+<style>
+  :root {
+    --bg: #16181d;
+    --card: #1f232b;
+    --border: rgba(255,255,255,0.1);
+    --text: #e6e8eb;
+    --muted: #9aa1ab;
+    --accent: #f4c542;
+    --accent2: #5ec9f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 24px 16px 60px;
+    line-height: 1.65;
+  }
+  .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  #title { margin-bottom: 30px; }
+  #title a.back-home {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  #title a.back-home:hover { color: var(--accent2); }
+  #title h1 { font-size: 2em; margin: 0 0 6px; color: var(--text); }
+  #title p { color: var(--muted); margin: 0; font-size: 1.05em; }
+  #title hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0 0;
+  }
+
+  h1, h2, h3, h4 { color: var(--text); line-height: 1.3; }
+  h2 { margin-top: 40px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h3 { margin-top: 28px; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { color: var(--accent2); text-decoration: underline; }
+
+  p, li { color: var(--text); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 30px 0; }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  code {
+    background: #12141a;
+    color: var(--accent2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #12141a;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+  }
+  pre code { background: none; padding: 0; color: var(--text); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+  }
+  th, td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  th {
+    background: var(--card);
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--accent);
+    margin: 16px 0;
+    padding: 4px 16px;
+    color: var(--muted);
+    background: var(--card);
+    border-radius: 0 8px 8px 0;
+  }
+
+  footer.site-footer-custom {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  footer.site-footer-custom a {
+    margin: 0 14px;
+    color: var(--text);
+    font-size: 1.6em;
+  }
+  footer.site-footer-custom a:hover { color: var(--accent); }
+</style>
 </head>
 <body>
 <div class="wrapper">
@@ -20,12 +129,13 @@
 <p>{{ site.tagline | default: site.description | default: site.github.project_tagline }}</p>
 <hr>
 </div>
+
 {{ content }}
 
-<footer style="text-align:center; margin-top:60px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.15);">
-  <a href="https://www.linkedin.com/in/matwandz/" target="_blank" style="margin:0 14px; color:inherit; font-size:1.6em;"><i class="fa-brands fa-linkedin"></i></a>
-  <a href="https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA" target="_blank" style="margin:0 14px; color:inherit; font-size:1.6em;"><i class="fa-brands fa-youtube"></i></a>
-  <a href="https://github.com/matiwan3/data-analysis" target="_blank" style="margin:0 14px; color:inherit; font-size:1.6em;"><i class="fa-brands fa-github"></i></a>
+<footer class="site-footer-custom">
+  <a href="https://www.linkedin.com/in/matwandz/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+  <a href="https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+  <a href="https://github.com/matiwan3/data-analysis" target="_blank"><i class="fa-brands fa-github"></i></a>
 </footer>
 </section>
 </div>
