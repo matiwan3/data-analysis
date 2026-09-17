@@ -1,7 +1,7 @@
-## Cześć
-Witam Cię na mojej stronie, gdzie publikuję treści związane z analizą danych w obszarze rynku nieruchomości i badaniami rynkowymi w formie wykresów, danych i wniosków.
+## Inwestowanie w nowoczesnej formie
+Dobre decyzje są podstawa do redukcji ryzyka inwestycyjnego stąd powstał pomysł na stworzenie zestawu intuicyjnych narzędzi dashboardów, danych aby finalnie zwiększać swoją pozycję i przewage w podejmowaniu decyzji finansowych.
 
-## O projekcie
+## O mnie
 
 <img src="https://github.com/user-attachments/assets/4ab060dd-5aec-46b5-a413-677927250031" alt="Mateusz Wandzlewicz" width="505" height="639" class="img-right">
 
