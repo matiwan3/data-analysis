@@ -1,9 +1,13 @@
 ## Cześć
 Witam Cię na mojej stronie, gdzie publikuję treści związane z analizą danych w obszarze rynku nieruchomości i badaniami rynkowymi w formie wykresów, danych i wniosków.
 
-## O mnie
+## O projekcie
 
-Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne narzędzia typu n8n, uzupełniając wyniki o rzetelną analizę danych i dashboardy BI. Na tej stronioe znajdziesz wiele case studies, narzedzia, wykresy i analizy z których możesz korzystać.
+<img src="https://github.com/user-attachments/assets/4ab060dd-5aec-46b5-a413-677927250031" alt="Mateusz Wandzlewicz" width="505" height="639" class="img-right">
+
+Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne narzędzia typu n8n, uzupełniając wyniki o rzetelną analizę danych i dashboardy BI. Na tej stronie znajdziesz wiele case studies, narzędzia, wykresy i analizy z których możesz korzystać. Na codzień zgłębiam temat rynku nieruchomości w Polsce w poszczególnych miastach dzięki czemu lepiej rozumiem dynamikę rynku i mogę podejmować dokładniejsze decyzje inwestycyjne.
+
+<div class="clear"></div>
 
 ## Projekty
 
