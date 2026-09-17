@@ -117,10 +117,29 @@
   .legend { display:flex; gap:18px; font-size:0.8em; color:var(--muted); margin-bottom:8px; flex-wrap:wrap; }
   .legend span { display:flex; align-items:center; gap:6px; }
   .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 600;
+  }
+  .site-nav a:hover { color: var(--accent2); }
 </style>
 </head>
 <body>
 <div class="container">
+  <nav class="site-nav">
+    <a href="../">Strona główna</a>
+    <a href="../#projekty">Projekty</a>
+  </nav>
   <h1>💰 Kalkulator raty kredytu hipotecznego</h1>
   <div class="subtitle">Symulacja spadku raty i kapitału z uwzględnieniem comiesięcznych nadpłat</div>
 

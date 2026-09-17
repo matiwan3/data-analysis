@@ -29,15 +29,22 @@
     margin: 0 auto;
   }
 
-  #title { margin-bottom: 30px; }
-  #title a.back-home {
-    display: inline-block;
-    margin-bottom: 10px;
-    font-size: 0.9em;
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav a {
     color: var(--accent);
     text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 600;
   }
-  #title a.back-home:hover { color: var(--accent2); }
+  .site-nav a:hover { color: var(--accent2); }
+  #title { margin-bottom: 30px; }
   #title h1 { font-size: 2em; margin: 0 0 6px; color: var(--text); }
   #title p { color: var(--muted); margin: 0; font-size: 1.05em; }
   #title hr {
@@ -133,8 +140,11 @@
 <body>
 <div class="wrapper">
 <section>
+<nav class="site-nav">
+  <a href="{{ '/' | relative_url }}">Strona główna</a>
+  <a href="{{ '/' | relative_url }}#projekty">Projekty</a>
+</nav>
 <div id="title">
-<a href="{{ '/' | relative_url }}" class="back-home">← Strona główna</a>
 <h1>{{ site.title | default: site.github.repository_name }}</h1>
 <p>{{ site.tagline | default: site.description | default: site.github.project_tagline }}</p>
 <hr>
