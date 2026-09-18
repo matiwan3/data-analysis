@@ -87,17 +87,24 @@
     overflow-x: auto;
   }
   pre code { background: none; padding: 0; color: var(--text); }
-    .img-right {
-    float: right;
-    max-width: 45%;
-    margin: 0 0 16px 24px;
+    .media-row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin: 16px 0;
   }
-  .img-left {
-    float: left;
-    max-width: 45%;
-    margin: 0 24px 16px 0;
+  .media-row p { margin: 0; }
+  .media-img {
+    flex-shrink: 0;
+    width: 38%;
+    max-width: 280px;
+    margin: 0;
   }
   .clear { clear: both; }
+  @media (max-width: 640px) {
+    .media-row { flex-direction: column; }
+    .media-img { width: 100%; max-width: 320px; }
+  }
   table {
     width: 100%;
     border-collapse: collapse;
