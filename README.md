@@ -1,17 +1,27 @@
-## Inwestowanie w nowoczesnej formie
-Dobre decyzje są podstawa do redukcji ryzyka inwestycyjnego stąd powstał pomysł na stworzenie zestawu intuicyjnych narzędzi dashboardów, danych aby finalnie zwiększać swoją pozycję i przewage w podejmowaniu decyzji finansowych.
-
 ## O mnie
+<img alt="att FJFf91x7lPFgVPNKio8EyWHe0AQ78XKADahbkNqh884 2" src="https://github.com/user-attachments/assets/893a5042-a796-411a-833a-276acff57a83" />
 
-<img src="https://github.com/user-attachments/assets/4ab060dd-5aec-46b5-a413-677927250031" alt="Mateusz Wandzlewicz" width="505" height="639" class="img-right">
-
-Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne narzędzia typu n8n, uzupełniając wyniki o rzetelną analizę danych i dashboardy BI. Na tej stronie znajdziesz wiele case studies, narzędzia, wykresy i analizy z których możesz korzystać. Na codzień zgłębiam temat rynku nieruchomości w Polsce w poszczególnych miastach dzięki czemu lepiej rozumiem dynamikę rynku i mogę podejmować dokładniejsze decyzje inwestycyjne.
-
+Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne narzędzia do analizy i obróbki danych. Dodatkowo studiuję finanse i rachunkowość gdzie rozwijam zdolności analityczne i poglębiam wiedze z dziedziny ekonomii. Interesuję się szeroko pojętymi rynkami finansowymi, geopolityką oraz analizą i wyceną spółek. Poza tym na codzień dużo liczę, 
 <div class="clear"></div>
 
+### Timeline 
+- w wieku 19 lat: ukończyłem technikum elektroniczne w Bydgoszczy z tytułem ICT
+- w wieku 20 lat: Dostałem się na Politechnikę Poznańska na kierunek ICT 
+- w wieku 21 lat: zdobyłem pierwszą pracę w IT (nie mając jeszcze ukończonych studiów!) jako tester - analityk
+- w wieku 23 lat: kupiłem swoje pierwsze mieszkanie i rozpocząłem studia na FiR
+- w wieku 24 lat: dołączyłem do prężnie działającego scale upu (Avanquest) gdzie rozwinąłem umiejętności analityczne, interpersonalne i techniczne
+- w wieku 25 lat: ... 
+
+## Inwestowanie w nowoczesnej formie
+<img src="https://github.com/user-attachments/assets/4ab060dd-5aec-46b5-a413-677927250031" alt="Mateusz Wandzlewicz" width="505" height="639" class="img-right">
+Rzetelne analizy są podstawą do minimalizacji ryzyka inwestycyjnego i podejmowania trafnych decyzji - tak powstał pomysł na stworzenie zestawu intuicyjnych narzędzi: dashboardów, baz danych i narzedzi analitycznych - które obecnie pomagają mi być dokładniejszym oraz zwiększać przewage w podejmowaniu decyzji finansowych.
+<div class="clear"></div>
 ## Projekty
 
 ### Nieruchomości
 
 - [Ceny mieszkań w Bydgoszczy 2006–2026 vs stopy procentowe NBP](./real-estate/bydgoszcz-ceny-mieszkan.md)
 - [Kalkulator raty kredytu hipotecznego (z nadpłatami)](./real-estate/kalkulator-raty.html)
+
+### Spółki
+- [Analiza sprawozdania finansowego Orlen 2020 Q1](./)
