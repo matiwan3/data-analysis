@@ -4,13 +4,18 @@
 Od ponad 4 lat tworzę automatyzację w projektach IT, wykorzystując nowoczesne narzędzia do analizy i obróbki danych. Dodatkowo studiuję finanse i rachunkowość gdzie rozwijam zdolności analityczne i poglębiam wiedze z dziedziny ekonomii. Interesuję się szeroko pojętymi rynkami finansowymi, geopolityką oraz analizą i wyceną spółek. Poza tym na codzień dużo liczę,
 <div class="clear"></div>
 
-### Timeline 
+### Oś czasu 
 - w wieku 19 lat: Ukończyłem technikum elektroniczne w Bydgoszczy z tytułem ICT
 - w wieku 20 lat: Dostałem się na Politechnikę Poznańska na kierunek ICT 
 - w wieku 21 lat: Zdobyłem pierwszą pracę w IT jako tester - analityk
 - w wieku 23 lat: Kupiłem swoje pierwsze mieszkanie i rozpocząłem studia na FiR
 - w wieku 24 lat: Dołączyłem do prężnie działającego scale upu (Avanquest) gdzie rozwinąłem umiejętności analityczne, interpersonalne i techniczne
 - w wieku 25 lat: ... 
+
+### A w planach
+- Zakończyć studia magisterskie FiR ze spec. Kontrola Finansowa
+- Rozpocząć studia podyplomowe Analityka Finansowa CFA
+- Uzyskać Certyfikat CFA level 1
 
 ## Inwestowanie w nowoczesnej formie
 <img src="https://github.com/user-attachments/assets/4ab060dd-5aec-46b5-a413-677927250031" alt="Mateusz Wandzlewicz" width="505" height="639" class="img-right">
