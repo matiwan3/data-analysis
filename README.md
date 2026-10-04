@@ -29,5 +29,9 @@ Rzetelne analizy są podstawą do minimalizacji ryzyka inwestycyjnego i podejmow
 - [Ceny mieszkań w Bydgoszczy 2006–2026 vs stopy procentowe NBP](./real-estate/bydgoszcz-ceny-mieszkan.md)
 - [Kalkulator raty kredytu hipotecznego (z nadpłatami)](./real-estate/kalkulator-raty.html)
 
+### Finanse
+
+- [Kalkulator procentu składanego](./finance/kalkulator-procentu-skladanego.html)
+
 ### Spółki
 - [Analiza sprawozdania finansowego Orlen 2020 Q1](./)

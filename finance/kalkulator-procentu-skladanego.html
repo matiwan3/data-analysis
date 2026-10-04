@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator procentu składanego</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #16181d;
+    --card: #1f232b;
+    --border: rgba(255,255,255,0.1);
+    --text: #e6e8eb;
+    --muted: #9aa1ab;
+    --accent: #f4c542;
+    --accent2: #5ec9f7;
+    --danger: #ff6b6b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    margin: 0;
+    padding: 24px 16px 60px;
+  }
+  .container { max-width: 980px; margin: 0 auto; }
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.95em;
+    font-weight: 600;
+  }
+  .site-nav a:hover { color: var(--accent2); }
+  h1 { font-size: 1.5em; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 28px; font-size: 0.95em; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  label {
+    display: block;
+    font-size: 0.85em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  input[type="number"] {
+    width: 100%;
+    background: #12141a;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 1em;
+  }
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin: 24px 0;
+  }
+  .summary .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+  .summary .stat .value { font-size: 1.5em; font-weight: 700; }
+  .summary .stat .label { color: var(--muted); font-size: 0.8em; margin-top: 4px; }
+  .stat.highlight .value { color: var(--accent); }
+  .stat.growth .value { color: #6fd68a; }
+  .stat.contrib .value { color: var(--accent2); }
+
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .chart-wrap canvas { max-height: 360px; }
+  .legend { display:flex; gap:18px; font-size:0.8em; color:var(--muted); margin-bottom:8px; flex-wrap:wrap; }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="site-nav">
+    <a href="../">Strona główna</a>
+    <a href="../#projekty">Projekty</a>
+  </nav>
+  <h1>📈 Kalkulator procentu składanego</h1>
+  <div class="subtitle">Symulacja wzrostu oszczędności z regularnymi, miesięcznymi wpłatami</div>
+
+  <div class="grid">
+    <div class="card">
+      <label>Kwota początkowa (PLN)</label>
+      <input type="number" id="initial" value="10000" step="500" min="0">
+    </div>
+    <div class="card">
+      <label>Miesięczna wpłata (PLN)</label>
+      <input type="number" id="monthly" value="500" step="50" min="0">
+    </div>
+    <div class="card">
+      <label>Stopa zwrotu (%)</label>
+      <input type="number" id="rate" value="6" step="0.1" min="0">
+    </div>
+    <div class="card">
+      <label>Horyzont czasowy (lata)</label>
+      <input type="number" id="years" value="10" step="1" min="1">
+    </div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="chart-wrap">
+    <div class="legend">
+      <span><span class="dot" style="background:#5ec9f7"></span>Suma wpłat</span>
+      <span><span class="dot" style="background:#f4c542"></span>Suma oszczędności</span>
+    </div>
+    <canvas id="growthChart"></canvas>
+  </div>
+</div>
+
+<script>
+const initialEl = document.getElementById('initial');
+const monthlyEl = document.getElementById('monthly');
+const rateEl = document.getElementById('rate');
+const yearsEl = document.getElementById('years');
+
+[initialEl, monthlyEl, rateEl, yearsEl].forEach(el => {
+  el.addEventListener('input', calculate);
+});
+
+function fmt(n) {
+  return Math.round(n).toLocaleString('pl-PL') + ' zł';
+}
+
+function simulate(initial, monthly, annualRatePct, years) {
+  const monthlyRate = (annualRatePct / 100) / 12;
+  const months = years * 12;
+  let balance = initial;
+  let contributed = initial;
+  const yearly = [{ year: 0, balance, contributed }];
+
+  for (let m = 1; m <= months; m++) {
+    balance = balance * (1 + monthlyRate) + monthly;
+    contributed += monthly;
+    if (m % 12 === 0) {
+      yearly.push({ year: m / 12, balance, contributed });
+    }
+  }
+  return { balance, contributed, yearly };
+}
+
+let chart = null;
+
+function calculate() {
+  const initial = parseFloat(initialEl.value) || 0;
+  const monthly = parseFloat(monthlyEl.value) || 0;
+  const rate = parseFloat(rateEl.value) || 0;
+  const years = parseInt(yearsEl.value) || 1;
+
+  const { balance, contributed, yearly } = simulate(initial, monthly, rate, years);
+  const growth = balance - contributed;
+
+  document.getElementById('summary').innerHTML = `
+    <div class="stat highlight">
+      <div class="value">${fmt(balance)}</div>
+      <div class="label">Suma oszczędności</div>
+    </div>
+    <div class="stat growth">
+      <div class="value">${fmt(growth)}</div>
+      <div class="label">Przyrost wartości</div>
+    </div>
+    <div class="stat contrib">
+      <div class="value">${fmt(contributed)}</div>
+      <div class="label">Suma wpłat</div>
+    </div>
+  `;
+
+  const labels = yearly.map(p => 'Rok ' + p.year);
+  const contributedData = yearly.map(p => Math.round(p.contributed));
+  const balanceData = yearly.map(p => Math.round(p.balance));
+
+  const ctx = document.getElementById('growthChart').getContext('2d');
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Suma wpłat',
+          data: contributedData,
+          borderColor: '#5ec9f7',
+          backgroundColor: 'transparent',
+          tension: 0.15,
+          pointRadius: 0
+        },
+        {
+          label: 'Suma oszczędności',
+          data: balanceData,
+          borderColor: '#f4c542',
+          backgroundColor: 'rgba(244,197,66,0.15)',
+          fill: '-1',
+          tension: 0.15,
+          pointRadius: 0
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#9aa1ab', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#9aa1ab' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+}
+
+calculate();
+</script>
+</body>
+</html>
