@@ -7,13 +7,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #16181d;
-    --card: #1f232b;
-    --border: rgba(255,255,255,0.1);
-    --text: #e6e8eb;
-    --muted: #9aa1ab;
-    --accent: #f4c542;
-    --accent2: #5ec9f7;
+    --bg: #0a0b0f;
+    --card: #15161d;
+    --border: rgba(255,255,255,0.08);
+    --text: #f1f3f5;
+    --muted: #8b92a0;
+    --accent: #22c55e;
+    --accent2: #4f8dff;
     --danger: #ff6b6b;
   }
   * { box-sizing: border-box; }
@@ -69,7 +69,7 @@
   }
   .toggle-btn.active {
     background: var(--accent);
-    color: #16181d;
+    color: var(--bg);
     border-color: var(--accent);
     font-weight: 600;
   }
@@ -90,7 +90,7 @@
   .summary .stat .value { font-size: 1.4em; font-weight: 700; }
   .summary .stat .label { color: var(--muted); font-size: 0.8em; margin-top: 4px; }
   .stat.highlight .value { color: var(--accent); }
-  .stat.saving .value { color: #6fd68a; }
+  .stat.saving .value { color: #22c55e; }
 
   .chart-wrap {
     background: var(--card);
@@ -138,31 +138,31 @@
 <div class="container">
   <nav class="site-nav">
     <a href="../">Strona główna</a>
-    <a href="../#projekty">Projekty</a>
+    <a href="../#narzedzia">Narzędzia</a>
   </nav>
-  <h1>💰 Kalkulator raty kredytu hipotecznego</h1>
+  <h1>Kalkulator raty kredytu hipotecznego</h1>
   <div class="subtitle">Symulacja spadku raty i kapitału z uwzględnieniem comiesięcznych nadpłat</div>
 
   <div class="grid">
     <div class="card">
       <label>Pozostały kapitał (zł)</label>
-      <input type="number" id="principal" value="280000" step="1000">
+      <input type="number" id="principal" placeholder="np. 280000" step="1000">
     </div>
     <div class="card">
       <label>Oprocentowanie roczne (%)</label>
-      <input type="number" id="rate" value="6.65" step="0.01">
+      <input type="number" id="rate" placeholder="np. 6.65" step="0.01">
     </div>
     <div class="card">
       <label>Pozostały okres (lata) — z umowy kredytowej</label>
-      <input type="number" id="years" value="25" step="1" readonly style="opacity:0.6; cursor:not-allowed;">
+      <input type="number" id="years" placeholder="np. 25" step="1">
     </div>
     <div class="card">
       <label>Data wzięcia kredytu</label>
-      <input type="date" id="startDate" value="2024-11-01">
+      <input type="date" id="startDate">
     </div>
     <div class="card">
       <label>Miesięczna nadpłata (zł)</label>
-      <input type="number" id="overpay" value="0" step="50">
+      <input type="number" id="overpay" placeholder="np. 0" step="50">
     </div>
   </div>
 
@@ -172,8 +172,8 @@
 
   <div class="chart-wrap">
     <div class="legend">
-      <span><span class="dot" style="background:#f4c542"></span>Pozostały kapitał — bez nadpłat</span>
-      <span><span class="dot" style="background:#5ec9f7"></span>Pozostały kapitał — z nadpłatą</span>
+      <span><span class="dot" style="background:#22c55e"></span>Pozostały kapitał — bez nadpłat</span>
+      <span><span class="dot" style="background:#4f8dff"></span>Pozostały kapitał — z nadpłatą</span>
     </div>
     <canvas id="balanceChart"></canvas>
   </div>
@@ -249,16 +249,40 @@ function fmt(n) {
 
 let chart = null;
 
+function showEmptyState() {
+  document.getElementById('fixedRateNote').innerHTML = '';
+  document.getElementById('summary').innerHTML = `
+    <div class="stat highlight"><div class="value">—</div><div class="label">Pierwsza rata</div></div>
+    <div class="stat"><div class="value">—</div><div class="label">Czas do spłaty</div></div>
+    <div class="stat"><div class="value">—</div><div class="label">Planowana data spłaty</div></div>
+    <div class="stat"><div class="value">—</div><div class="label">Suma odsetek</div></div>
+    <div class="stat saving"><div class="value">—</div><div class="label">Oszczędność na odsetkach</div></div>
+    <div class="stat saving"><div class="value">—</div><div class="label">Skrócenie okresu</div></div>
+  `;
+  document.getElementById('scheduleBody').innerHTML = '';
+  if (chart) { chart.destroy(); chart = null; }
+}
+
 function calculate() {
-  const principal = parseFloat(document.getElementById('principal').value) || 0;
-  const rate = parseFloat(document.getElementById('rate').value) || 0;
-  const years = parseFloat(document.getElementById('years').value) || 1;
+  const principalEl = document.getElementById('principal');
+  const rateEl = document.getElementById('rate');
+  const yearsEl = document.getElementById('years');
+  const startDateEl = document.getElementById('startDate');
+
+  if (principalEl.value === '' || rateEl.value === '' || yearsEl.value === '' || startDateEl.value === '') {
+    showEmptyState();
+    return;
+  }
+
+  const principal = parseFloat(principalEl.value) || 0;
+  const rate = parseFloat(rateEl.value) || 0;
+  const years = parseFloat(yearsEl.value) || 1;
   const overpay = parseFloat(document.getElementById('overpay').value) || 0;
-  const startDate = new Date(document.getElementById('startDate').value || '2024-11-01');
+  const startDate = new Date(startDateEl.value);
 
   const fixedRateEnd = addMonths(startDate, 60);
   document.getElementById('fixedRateNote').innerHTML =
-    `📌 Oprocentowanie <strong>${rate}%</strong> jest stałe do <strong>${fmtDate(fixedRateEnd)}</strong> (5 lat od uruchomienia kredytu). ` +
+    `Oprocentowanie <strong>${rate}%</strong> jest stałe do <strong>${fmtDate(fixedRateEnd)}</strong> (5 lat od uruchomienia kredytu). ` +
     `Po tym okresie kalkulator zakłada tę samą stopę procentową dalej — realne przyszłe oprocentowanie zależy od decyzji NBP i jest trudne do przewidzenia, więc traktuj wynik po tej dacie jako orientacyjny.`;
 
   const base = simulate(principal, rate, years, 0, mode);
@@ -313,16 +337,16 @@ function calculate() {
     data: {
       labels,
       datasets: [
-        { label: 'Bez nadpłat', data: baseData, borderColor: '#f4c542', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 },
-        { label: 'Z nadpłatą', data: overData, borderColor: '#5ec9f7', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 }
+        { label: 'Bez nadpłat', data: baseData, borderColor: '#22c55e', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 },
+        { label: 'Z nadpłatą', data: overData, borderColor: '#4f8dff', backgroundColor: 'transparent', tension: 0.15, pointRadius: 0 }
       ]
     },
     options: {
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { color: '#9aa1ab', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { ticks: { color: '#9aa1ab' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        x: { ticks: { color: '#8b92a0', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#8b92a0' }, grid: { color: 'rgba(255,255,255,0.05)' } }
       }
     }
   });

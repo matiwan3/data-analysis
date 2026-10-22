@@ -7,13 +7,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
   :root {
-    --bg: #16181d;
-    --card: #1f232b;
-    --border: rgba(255,255,255,0.1);
-    --text: #e6e8eb;
-    --muted: #9aa1ab;
-    --accent: #f4c542;
-    --accent2: #5ec9f7;
+    --bg: #0a0b0f;
+    --card: #15161d;
+    --border: rgba(255,255,255,0.08);
+    --text: #f1f3f5;
+    --muted: #8b92a0;
+    --accent: #22c55e;
+    --accent2: #4f8dff;
   }
   * { box-sizing: border-box; }
   body {
@@ -44,8 +44,17 @@
     font-weight: 600;
   }
   .site-nav a:hover { color: var(--accent2); }
-  #title { margin-bottom: 30px; }
-  #title h1 { font-size: 2em; margin: 0 0 6px; color: var(--text); }
+  #title { margin-bottom: 30px; text-align: center; }
+  #title h1 {
+    font-size: 2.6em;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin: 0 0 8px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
   #title p { color: var(--muted); margin: 0; font-size: 1.05em; }
   #title hr {
     border: none;
@@ -140,12 +149,46 @@
     padding-top: 20px;
     border-top: 1px solid var(--border);
   }
-  footer.site-footer-custom a {
+  footer.site-footer-custom .footer-links {
+    margin-bottom: 14px;
+    font-size: 0.9em;
+  }
+  footer.site-footer-custom .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  footer.site-footer-custom .footer-links a:hover { color: var(--accent); }
+  footer.site-footer-custom .social a {
     margin: 0 14px;
     color: var(--text);
     font-size: 1.6em;
   }
-  footer.site-footer-custom a:hover { color: var(--accent); }
+  footer.site-footer-custom .social a:hover { color: var(--accent); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin: 20px 0 10px;
+  }
+  .tool-card {
+    display: block;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    color: var(--text) !important;
+    text-decoration: none !important;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .tool-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .tool-card .tool-icon { font-size: 1.8em; margin-bottom: 10px; }
+  .tool-card .tool-title { font-weight: 700; font-size: 1.05em; margin-bottom: 6px; }
+  .tool-card .tool-desc { color: var(--muted); font-size: 0.88em; line-height: 1.5; }
+  .tool-card .tool-cta { color: var(--accent); font-size: 0.85em; font-weight: 600; margin-top: 14px; display: inline-block; }
 </style>
 </head>
 <body>
@@ -153,7 +196,7 @@
 <section>
 <nav class="site-nav">
   <a href="{{ '/' | relative_url }}">Strona główna</a>
-  <a href="{{ '/' | relative_url }}#projekty">Projekty</a>
+  <a href="{{ '/' | relative_url }}#narzedzia">Narzędzia</a>
 </nav>
 <div id="title">
 <h1>{{ site.title | default: site.github.repository_name }}</h1>
@@ -164,9 +207,14 @@
 {{ content }}
 
 <footer class="site-footer-custom">
-  <a href="https://www.linkedin.com/in/matwandz/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-  <a href="https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-  <a href="https://github.com/matiwan3/data-analysis" target="_blank"><i class="fa-brands fa-github"></i></a>
+  <div class="footer-links">
+    <a href="{{ '/archiwum/' | relative_url }}">Archiwum (dawne projekty i treści)</a>
+  </div>
+  <div class="social">
+    <a href="https://www.linkedin.com/in/matwandz/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    <a href="https://www.youtube.com/channel/UC3zCsmmnayvJ_pNMImkqAVA" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+    <a href="https://github.com/matiwan3/data-analysis" target="_blank"><i class="fa-brands fa-github"></i></a>
+  </div>
 </footer>
 </section>
 </div>

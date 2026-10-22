@@ -7,13 +7,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #16181d;
-    --card: #1f232b;
-    --border: rgba(255,255,255,0.1);
-    --text: #e6e8eb;
-    --muted: #9aa1ab;
-    --accent: #f4c542;
-    --accent2: #5ec9f7;
+    --bg: #0a0b0f;
+    --card: #15161d;
+    --border: rgba(255,255,255,0.08);
+    --text: #f1f3f5;
+    --muted: #8b92a0;
+    --accent: #22c55e;
+    --accent2: #4f8dff;
     --danger: #ff6b6b;
   }
   * { box-sizing: border-box; }
@@ -86,7 +86,7 @@
   .summary .stat .value { font-size: 1.5em; font-weight: 700; }
   .summary .stat .label { color: var(--muted); font-size: 0.8em; margin-top: 4px; }
   .stat.highlight .value { color: var(--accent); }
-  .stat.growth .value { color: #6fd68a; }
+  .stat.growth .value { color: #22c55e; }
   .stat.contrib .value { color: var(--accent2); }
 
   .chart-wrap {
@@ -106,27 +106,27 @@
 <div class="container">
   <nav class="site-nav">
     <a href="../">Strona główna</a>
-    <a href="../#projekty">Projekty</a>
+    <a href="../#narzedzia">Narzędzia</a>
   </nav>
-  <h1>📈 Kalkulator procentu składanego</h1>
+  <h1>Kalkulator procentu składanego</h1>
   <div class="subtitle">Symulacja wzrostu oszczędności z regularnymi, miesięcznymi wpłatami</div>
 
   <div class="grid">
     <div class="card">
       <label>Kwota początkowa (PLN)</label>
-      <input type="number" id="initial" value="10000" step="500" min="0">
+      <input type="number" id="initial" placeholder="np. 10000" step="500" min="0">
     </div>
     <div class="card">
       <label>Miesięczna wpłata (PLN)</label>
-      <input type="number" id="monthly" value="500" step="50" min="0">
+      <input type="number" id="monthly" placeholder="np. 500" step="50" min="0">
     </div>
     <div class="card">
       <label>Stopa zwrotu (%)</label>
-      <input type="number" id="rate" value="6" step="0.1" min="0">
+      <input type="number" id="rate" placeholder="np. 6" step="0.1" min="0">
     </div>
     <div class="card">
       <label>Horyzont czasowy (lata)</label>
-      <input type="number" id="years" value="10" step="1" min="1">
+      <input type="number" id="years" placeholder="np. 10" step="1" min="1">
     </div>
   </div>
 
@@ -134,8 +134,8 @@
 
   <div class="chart-wrap">
     <div class="legend">
-      <span><span class="dot" style="background:#5ec9f7"></span>Suma wpłat</span>
-      <span><span class="dot" style="background:#f4c542"></span>Suma oszczędności</span>
+      <span><span class="dot" style="background:#4f8dff"></span>Suma wpłat</span>
+      <span><span class="dot" style="background:#22c55e"></span>Suma oszczędności</span>
     </div>
     <canvas id="growthChart"></canvas>
   </div>
@@ -174,7 +174,30 @@ function simulate(initial, monthly, annualRatePct, years) {
 
 let chart = null;
 
+function showEmptyState() {
+  document.getElementById('summary').innerHTML = `
+    <div class="stat highlight">
+      <div class="value">—</div>
+      <div class="label">Suma oszczędności</div>
+    </div>
+    <div class="stat growth">
+      <div class="value">—</div>
+      <div class="label">Przyrost wartości</div>
+    </div>
+    <div class="stat contrib">
+      <div class="value">—</div>
+      <div class="label">Suma wpłat</div>
+    </div>
+  `;
+  if (chart) { chart.destroy(); chart = null; }
+}
+
 function calculate() {
+  if (initialEl.value === '' || monthlyEl.value === '' || rateEl.value === '' || yearsEl.value === '') {
+    showEmptyState();
+    return;
+  }
+
   const initial = parseFloat(initialEl.value) || 0;
   const monthly = parseFloat(monthlyEl.value) || 0;
   const rate = parseFloat(rateEl.value) || 0;
@@ -212,7 +235,7 @@ function calculate() {
         {
           label: 'Suma wpłat',
           data: contributedData,
-          borderColor: '#5ec9f7',
+          borderColor: '#4f8dff',
           backgroundColor: 'transparent',
           tension: 0.15,
           pointRadius: 0
@@ -220,8 +243,8 @@ function calculate() {
         {
           label: 'Suma oszczędności',
           data: balanceData,
-          borderColor: '#f4c542',
-          backgroundColor: 'rgba(244,197,66,0.15)',
+          borderColor: '#22c55e',
+          backgroundColor: 'rgba(34,197,94,0.15)',
           fill: '-1',
           tension: 0.15,
           pointRadius: 0
@@ -232,8 +255,8 @@ function calculate() {
       responsive: true,
       plugins: { legend: { display: false } },
       scales: {
-        x: { ticks: { color: '#9aa1ab', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { ticks: { color: '#9aa1ab' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+        x: { ticks: { color: '#8b92a0', maxTicksLimit: 10 }, grid: { color: 'rgba(255,255,255,0.05)' } },
+        y: { ticks: { color: '#8b92a0' }, grid: { color: 'rgba(255,255,255,0.05)' } }
       }
     }
   });
